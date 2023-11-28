@@ -3,6 +3,8 @@ package tacos;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.datastax.oss.driver.api.core.data.UdtValue;
+
 public class TacoUDRUtils {
 
   public static TacoUDT toTacoUDT(Taco taco) {
@@ -19,4 +21,5 @@ public class TacoUDRUtils {
     return new IngredientUDT(ingredient.getName(), ingredient.getType());
   }
   
+  // public static UdtValue
 }

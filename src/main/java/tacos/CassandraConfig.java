@@ -8,6 +8,7 @@ import org.springframework.data.cassandra.repository.config.EnableCassandraRepos
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
 
 @Configuration
 @EnableCassandraRepositories(basePackages = { "tacos" })
@@ -15,9 +16,15 @@ public class CassandraConfig {
 
     // bean for session
     @Bean
-    CqlSession session() {
+    CqlSession session() { 
         CqlSessionBuilder builder = CqlSession.builder().withKeyspace("taco_cloud")
                 .withLocalDatacenter("datacenter1");
         return builder.build();
     }
+
+    @Bean
+    KeyspaceMetadata keyspaceMetadata(CqlSession session) {
+        return session.getMetadata().getKeyspace("taco_cloud").get();
+    }
+
 }

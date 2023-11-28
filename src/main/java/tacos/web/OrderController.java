@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import tacos.TacoOrder;
+import tacos.data.IngredientRepository;
 import tacos.data.OrderRepository;
 
 @Controller
@@ -19,9 +20,11 @@ import tacos.data.OrderRepository;
 public class OrderController {
 
   private OrderRepository orderRepo;
+  private IngredientRepository ingredientRepo;
 
-  public OrderController(OrderRepository orderRepo) {
+  public OrderController(OrderRepository orderRepo, IngredientRepository ingredientRepo) {
     this.orderRepo = orderRepo;
+    this.ingredientRepo = ingredientRepo;
   }
 
   @GetMapping("/current")
@@ -36,6 +39,9 @@ public class OrderController {
     }
 
     orderRepo.save(order);
+    // order.getTacos().forEach(taco -> {
+    //   ingredientRepo.save(taco.getIngredients());
+    // });
     sessionStatus.setComplete();
 
     return "redirect:/";
