@@ -1,7 +1,9 @@
 package tacos.data;
 
-import tacos.TacoOrder;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+
+import tacos.domain.TacoOrder;
 
 public interface OrderRepository {
-    public TacoOrder save(TacoOrder order);
+    public ResultSet save(TacoOrder order);
 }

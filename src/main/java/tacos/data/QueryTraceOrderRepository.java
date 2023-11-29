@@ -21,9 +21,8 @@ import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
 import com.datastax.oss.driver.api.core.type.UserDefinedType;
 
 import lombok.extern.slf4j.Slf4j;
-
-import tacos.TacoOrder;
-import tacos.TacoUDT;
+import tacos.domain.TacoOrder;
+import tacos.domain.TacoUDT;
 
 @Slf4j
 @Repository
@@ -31,42 +30,21 @@ public class QueryTraceOrderRepository implements OrderRepository {
 
     private final CqlSession session;
     private final PreparedStatement saveStatement;
-    private final UserDefinedType tacoudt;
-    private final UserDefinedType ingredientudt;
 
     public QueryTraceOrderRepository(CqlSession session) {
         this.session = session;
         this.saveStatement = session.prepare("INSERT INTO orders (id, deliveryname, deliverystreet, deliverycity, " +
                         "deliverystate, deliveryzip, ccnumber, ccexpiration, cccvv, placedat, tacos)" +
                         "values (?,?,?,?,?,?,?,?,?,?,?)");
-        this.tacoudt = session.getMetadata().getKeyspace("taco_cloud").get().getUserDefinedType("taco").get();
-        this.ingredientudt = session.getMetadata().getKeyspace("taco_cloud").get().getUserDefinedType("ingredient").get();
     }
 
     @Override
-    public TacoOrder save(TacoOrder order) {
-        List<UdtValue> tacoUdtValues = order.getTacos().stream().map(taco -> {
-            List<UdtValue> ingredienUdtValues = taco.getIngredients().stream().map(ingredient -> {
-                UdtValue ingredientUdtValue = ingredientudt.newValue();
-                ingredientUdtValue.setString("name", ingredient.getName());
-                ingredientUdtValue.setString("type", ingredient.getType().toString());
-                return ingredientUdtValue;
-            }).collect(java.util.stream.Collectors.toList());
-            UdtValue udtValue = tacoudt.newValue();
-            udtValue.setString("name", taco.getName());
-            udtValue.setList("ingredients", ingredienUdtValues, UdtValue.class);
-            return udtValue;
-        }).collect(java.util.stream.Collectors.toList());
-
+    public ResultSet save(TacoOrder order) {
         BoundStatement statement = this.saveStatement.bind(order.getId(), order.getDeliveryName(), order.getDeliveryStreet(),
                 order.getDeliveryCity(), order.getDeliveryState(), order.getDeliveryZip(),
                 order.getCcNumber(), order.getCcExpiration(), order.getCcCVV(),
-                order.getPlacedAt(), tacoUdtValues).setTracing(true);
-        ResultSet rs = session.execute(statement);
-        ExecutionInfo info = rs.getExecutionInfo();
-        QueryTrace queryTrace = info.getQueryTrace();
-        log.info("QueryTraceDurationMicros: {}", queryTrace.getDurationMicros());
-        return order;
+                order.getPlacedAt(), order.getTacos()).setTracing(true);
+        return session.execute(statement);
     }
 
 }

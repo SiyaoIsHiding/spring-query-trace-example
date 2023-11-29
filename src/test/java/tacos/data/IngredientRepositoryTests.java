@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import tacos.Ingredient;
-import tacos.Ingredient.Type;
+import tacos.domain.Ingredient;
+import tacos.domain.Ingredient.Type;
 
 @SpringBootTest
 public class IngredientRepositoryTests {

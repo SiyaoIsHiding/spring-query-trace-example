@@ -1,4 +1,4 @@
-package tacos;
+package tacos.domain;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;

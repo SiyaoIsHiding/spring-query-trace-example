@@ -1,4 +1,4 @@
-package tacos;
+package tacos.domain;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +20,5 @@ public class TacoUDRUtils {
   public static IngredientUDT toIngredientUDT(Ingredient ingredient) {
     return new IngredientUDT(ingredient.getName(), ingredient.getType());
   }
-  
-  // public static UdtValue
+
 }

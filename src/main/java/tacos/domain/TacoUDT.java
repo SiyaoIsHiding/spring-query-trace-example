@@ -1,4 +1,4 @@
-package tacos;
+package tacos.domain;
 
 import java.util.List;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
