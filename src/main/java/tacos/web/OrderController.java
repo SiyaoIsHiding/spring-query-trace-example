@@ -1,5 +1,9 @@
 package tacos.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -40,7 +44,7 @@ public class OrderController {
   }
 
   @PostMapping
-  public String processOrder(@Valid TacoOrder order, Errors errors, SessionStatus sessionStatus) {
+  public String processOrder(@Valid TacoOrder order, Errors errors, Model model, SessionStatus sessionStatus) {
     if (errors.hasErrors()) {
       return "orderForm";
     }
@@ -48,10 +52,16 @@ public class OrderController {
     ResultSet rs = orderRepo.save(order);
     ExecutionInfo info = rs.getExecutionInfo();
     QueryTrace queryTrace = info.getQueryTrace();
-    log.info("QueryTraceDurationMicros: {}", queryTrace.getDurationMicros());
+    List<String> traceMessages = queryTrace.getEvents().stream().map(event ->
+        String.format("* %s on %s[%s] at %s (%sµs)",
+            event.getActivity(),
+            event.getSourceAddress(),
+            event.getThreadName(),
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(event.getTimestamp())),
+            event.getSourceElapsedMicros())).collect(java.util.stream.Collectors.toList());
+    model.addAttribute("trace", traceMessages);
     sessionStatus.setComplete();
-
-    return "redirect:/";
+    return "trace";
   }
 
 }
