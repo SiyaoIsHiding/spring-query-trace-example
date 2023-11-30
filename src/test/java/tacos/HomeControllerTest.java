@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import tacos.data.IngredientRepository;
-import tacos.data.OrderRepository;
+import tacos.data.OrderRepositoryCustomTrace;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest
@@ -28,7 +28,7 @@ public class HomeControllerTest {
   private IngredientRepository ingredientRepository;
 
   @MockBean
-  private OrderRepository orderRepository;
+  private OrderRepositoryCustomTrace orderRepository;
 
   @Test
   public void testHomePage() throws Exception {

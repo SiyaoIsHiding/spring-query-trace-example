@@ -19,7 +19,7 @@ import tacos.domain.Ingredient.Type;
 public class OrderRepositoryTests {
 
   @Autowired
-  OrderRepository orderRepo;
+  OrderRepositoryCustomTrace orderRepo;
   
   @Test
   public void saveOrderWithTwoTacos() {

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import tacos.data.IngredientRepository;
-import tacos.data.QueryTraceOrderRepository;
+import tacos.data.OrderRepositoryImpl;
 import tacos.domain.Ingredient;
 import tacos.domain.Ingredient.Type;
 

@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import tacos.data.IngredientRepository;
-import tacos.data.OrderRepository;
+import tacos.data.OrderRepositoryCustomTrace;
 import tacos.domain.Ingredient;
 import tacos.domain.Taco;
 import tacos.domain.Ingredient.Type;
@@ -43,7 +43,7 @@ public class DesignTacoControllerTest {
   private IngredientRepository ingredientRepository;
 
   @MockBean
-  private OrderRepository orderRepository;
+  private OrderRepositoryCustomTrace orderRepository;
 
   @BeforeEach
   public void setup() {

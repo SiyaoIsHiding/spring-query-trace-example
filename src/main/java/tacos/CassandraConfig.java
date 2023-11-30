@@ -1,5 +1,7 @@
 package tacos;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
@@ -34,6 +36,11 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     @Bean
     KeyspaceMetadata keyspaceMetadata(CqlSession session) {
         return session.getMetadata().getKeyspace(KEYSPACE).get();
+    }
+
+    @PostConstruct
+    private void PreparedStatement(){
+        
     }
 
     private void registerCodec(CqlSession session){

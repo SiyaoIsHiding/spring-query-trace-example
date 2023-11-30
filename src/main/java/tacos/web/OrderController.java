@@ -21,8 +21,8 @@ import com.datastax.oss.driver.api.core.cql.ResultSet;
 
 import lombok.extern.slf4j.Slf4j;
 import tacos.data.IngredientRepository;
+import tacos.data.OrderRepositoryCustomTrace;
 import tacos.data.OrderRepository;
-import tacos.data.SpringOrderRepository;
 import tacos.domain.TacoOrder;
 
 @Controller
@@ -34,7 +34,7 @@ public class OrderController {
   private OrderRepository orderRepo;
   private IngredientRepository ingredientRepo;
 
-  public OrderController(OrderRepository orderRepo, IngredientRepository ingredientRepo, SpringOrderRepository springOrderRepository) {
+  public OrderController(OrderRepository orderRepo, IngredientRepository ingredientRepo) {
     this.orderRepo = orderRepo;
     this.ingredientRepo = ingredientRepo;
   }
@@ -50,7 +50,7 @@ public class OrderController {
       return "orderForm";
     }
 
-    ResultSet rs = orderRepo.save(order);
+    ResultSet rs = orderRepo.saveWithQueryTrace(order);
     ExecutionInfo info = rs.getExecutionInfo();
     QueryTrace queryTrace = info.getQueryTrace();
     List<String> traceMessages = queryTrace.getEvents().stream().map(event ->

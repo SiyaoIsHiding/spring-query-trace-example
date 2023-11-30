@@ -1,9 +1,11 @@
 package tacos.data;
 
-import com.datastax.oss.driver.api.core.cql.ResultSet;
+import java.util.UUID;
+
+import org.springframework.data.repository.CrudRepository;
 
 import tacos.domain.TacoOrder;
 
-public interface OrderRepository {
-    public ResultSet save(TacoOrder order);
+public interface OrderRepository extends CrudRepository<TacoOrder, UUID>, OrderRepositoryCustomTrace{
+    
 }

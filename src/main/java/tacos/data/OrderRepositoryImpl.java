@@ -9,6 +9,7 @@ import org.springframework.data.cassandra.core.CassandraTemplate;
 import org.springframework.data.cassandra.core.cql.CqlOperations;
 import org.springframework.data.cassandra.core.cql.CqlTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
@@ -28,23 +29,23 @@ import tacos.domain.TacoUDT;
 
 @Slf4j
 @Repository
-public class QueryTraceOrderRepository implements OrderRepository {
+public class OrderRepositoryImpl implements OrderRepositoryCustomTrace {
 
     private final CqlSession session;
     private PreparedStatement saveStatement;
 
-    public QueryTraceOrderRepository(CqlSession session, SpringOrderRepository springOrderRepository) {
+    public OrderRepositoryImpl(CqlSession session) {
         this.session = session;
     }
 
-    public void postConstruct() {
-        this.saveStatement = session.prepare("INSERT INTO orders (id, deliveryname, deliverystreet, deliverycity, " +
-                        "deliverystate, deliveryzip, ccnumber, ccexpiration, cccvv, placedat, tacos)" +
-                        "values (?,?,?,?,?,?,?,?,?,?,?)");
-    }
+    // public void postConstruct() {
+    //     this.saveStatement = session.prepare("INSERT INTO orders (id, deliveryname, deliverystreet, deliverycity, " +
+    //                     "deliverystate, deliveryzip, ccnumber, ccexpiration, cccvv, placedat, tacos)" +
+    //                     "values (?,?,?,?,?,?,?,?,?,?,?)");
+    // }
 
     @Override
-    public ResultSet save(TacoOrder order) {
+    public ResultSet saveWithQueryTrace(TacoOrder order) {
         BoundStatement statement = this.saveStatement.bind(order.getId(), order.getDeliveryName(), order.getDeliveryStreet(),
                 order.getDeliveryCity(), order.getDeliveryState(), order.getDeliveryZip(),
                 order.getCcNumber(), order.getCcExpiration(), order.getCcCVV(),
