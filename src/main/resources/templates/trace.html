@@ -11,6 +11,9 @@
     <div th:each="message : ${trace}">
         <p th:text="${message}">Message</p>
     </div>
+    <div>
+        <a th:href="@{/}">Return to Home</a>
+    </div>
 </body>
 
 </html>

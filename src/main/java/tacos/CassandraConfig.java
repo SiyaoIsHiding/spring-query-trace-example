@@ -2,7 +2,6 @@ package tacos;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
@@ -10,7 +9,6 @@ import org.springframework.data.cassandra.config.SchemaAction;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
 import com.datastax.oss.driver.api.core.type.UserDefinedType;
 import com.datastax.oss.driver.api.core.type.codec.registry.MutableCodecRegistry;
@@ -23,16 +21,6 @@ import tacos.domain.TacoCodec;
 public class CassandraConfig extends AbstractCassandraConfiguration {
 
     public static final String KEYSPACE = "taco_cloud";
-    public static final String DATA_CENTER = "datacenter1";
-    // bean for session
-    // @Bean
-    // CqlSession session() { 
-    //     CqlSessionBuilder builder = CqlSession.builder().withKeyspace(KEYSPACE)
-    //             .withLocalDatacenter(DATA_CENTER);
-    //     CqlSession session = builder.build();
-    //     registerCodec(session);
-    //     return session;
-    // }
 
     @Bean
     KeyspaceMetadata keyspaceMetadata(CqlSession session) {

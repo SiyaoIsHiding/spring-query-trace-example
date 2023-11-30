@@ -1,33 +1,14 @@
 package tacos.data;
 
-import java.sql.Types;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.data.cassandra.core.CassandraTemplate;
-import org.springframework.data.cassandra.core.cql.CqlOperations;
-import org.springframework.data.cassandra.core.cql.CqlTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
-import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
-import com.datastax.oss.driver.api.core.cql.QueryTrace;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
-import com.datastax.oss.driver.api.core.cql.Statement;
-import com.datastax.oss.driver.api.core.data.UdtValue;
-import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
-import com.datastax.oss.driver.api.core.type.UserDefinedType;
 
-import lombok.extern.slf4j.Slf4j;
 import tacos.domain.TacoOrder;
-import tacos.domain.TacoUDT;
 
-@Slf4j
 @Repository
 public class OrderRepositoryImpl implements OrderRepositoryCustomTrace {
 

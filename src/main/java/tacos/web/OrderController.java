@@ -19,24 +19,18 @@ import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
 import com.datastax.oss.driver.api.core.cql.QueryTrace;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 
-import lombok.extern.slf4j.Slf4j;
-import tacos.data.IngredientRepository;
-import tacos.data.OrderRepositoryCustomTrace;
 import tacos.data.OrderRepository;
 import tacos.domain.TacoOrder;
 
 @Controller
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
-@Slf4j
 public class OrderController {
 
   private OrderRepository orderRepo;
-  private IngredientRepository ingredientRepo;
 
-  public OrderController(OrderRepository orderRepo, IngredientRepository ingredientRepo) {
+  public OrderController(OrderRepository orderRepo) {
     this.orderRepo = orderRepo;
-    this.ingredientRepo = ingredientRepo;
     orderRepo.init();
   }
 
