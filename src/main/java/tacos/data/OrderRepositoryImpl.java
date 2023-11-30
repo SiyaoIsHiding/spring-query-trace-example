@@ -38,18 +38,21 @@ public class OrderRepositoryImpl implements OrderRepositoryCustomTrace {
         this.session = session;
     }
 
-    // public void postConstruct() {
-    //     this.saveStatement = session.prepare("INSERT INTO orders (id, deliveryname, deliverystreet, deliverycity, " +
-    //                     "deliverystate, deliveryzip, ccnumber, ccexpiration, cccvv, placedat, tacos)" +
-    //                     "values (?,?,?,?,?,?,?,?,?,?,?)");
-    // }
+    @Override
+    public void init() {
+        this.saveStatement = session.prepare("INSERT INTO orders (id, deliveryname, deliverystreet, deliverycity, " +
+                "deliverystate, deliveryzip, ccnumber, ccexpiration, cccvv, placedat, tacos)" +
+                "values (?,?,?,?,?,?,?,?,?,?,?)");
+    }
 
     @Override
     public ResultSet saveWithQueryTrace(TacoOrder order) {
-        BoundStatement statement = this.saveStatement.bind(order.getId(), order.getDeliveryName(), order.getDeliveryStreet(),
-                order.getDeliveryCity(), order.getDeliveryState(), order.getDeliveryZip(),
-                order.getCcNumber(), order.getCcExpiration(), order.getCcCVV(),
-                order.getPlacedAt(), order.getTacos()).setTracing(true);
+        BoundStatement statement = this.saveStatement
+                .bind(order.getId(), order.getDeliveryName(), order.getDeliveryStreet(),
+                        order.getDeliveryCity(), order.getDeliveryState(), order.getDeliveryZip(),
+                        order.getCcNumber(), order.getCcExpiration(), order.getCcCVV(),
+                        order.getPlacedAt(), order.getTacos())
+                .setTracing(true);
         return session.execute(statement);
     }
 

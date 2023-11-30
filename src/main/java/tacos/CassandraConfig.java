@@ -2,6 +2,7 @@ package tacos;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
@@ -39,11 +40,8 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     }
 
     @PostConstruct
-    private void PreparedStatement(){
-        
-    }
-
-    private void registerCodec(CqlSession session){
+    void registerCodec(){
+        CqlSession session = getRequiredSession();
         UserDefinedType tacoUDT = session.getMetadata().getKeyspace(CassandraConfig.KEYSPACE).get().getUserDefinedType("taco").get();
         UserDefinedType ingredientUDT = session.getMetadata().getKeyspace(CassandraConfig.KEYSPACE).get().getUserDefinedType("ingredient").get();
         

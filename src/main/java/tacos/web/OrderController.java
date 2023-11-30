@@ -37,6 +37,7 @@ public class OrderController {
   public OrderController(OrderRepository orderRepo, IngredientRepository ingredientRepo) {
     this.orderRepo = orderRepo;
     this.ingredientRepo = ingredientRepo;
+    orderRepo.init();
   }
 
   @GetMapping("/current")
