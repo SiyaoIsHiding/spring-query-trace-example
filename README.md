@@ -61,10 +61,13 @@ If you have a Cassandra instance running somewhere else, you can change the conf
 ![images/home.png](images/home.png)
 
 Build the taco
+
 ![images/design.png](images/design.png)
 
 Place the order
+
 ![images/order.png](images/order.png)
 
 See the trace
+
 ![images/trace.png](images/trace.png)
