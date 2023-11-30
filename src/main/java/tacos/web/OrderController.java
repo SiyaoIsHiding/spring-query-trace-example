@@ -22,6 +22,7 @@ import com.datastax.oss.driver.api.core.cql.ResultSet;
 import lombok.extern.slf4j.Slf4j;
 import tacos.data.IngredientRepository;
 import tacos.data.OrderRepository;
+import tacos.data.SpringOrderRepository;
 import tacos.domain.TacoOrder;
 
 @Controller
@@ -33,7 +34,7 @@ public class OrderController {
   private OrderRepository orderRepo;
   private IngredientRepository ingredientRepo;
 
-  public OrderController(OrderRepository orderRepo, IngredientRepository ingredientRepo) {
+  public OrderController(OrderRepository orderRepo, IngredientRepository ingredientRepo, SpringOrderRepository springOrderRepository) {
     this.orderRepo = orderRepo;
     this.ingredientRepo = ingredientRepo;
   }

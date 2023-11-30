@@ -4,3 +4,6 @@ spring:
       keyspace-name: taco_cloud
       schema-action: recreate
       local-datacenter: datacenter1
+logging:
+  level:
+    ROOT: DEBUG

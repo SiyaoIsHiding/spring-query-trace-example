@@ -3,8 +3,6 @@ package tacos.domain;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.datastax.oss.driver.api.core.data.UdtValue;
-
 public class TacoUDRUtils {
 
   public static TacoUDT toTacoUDT(Taco taco) {

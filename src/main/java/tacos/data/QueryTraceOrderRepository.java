@@ -3,6 +3,8 @@ package tacos.data;
 import java.sql.Types;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.data.cassandra.core.CassandraTemplate;
 import org.springframework.data.cassandra.core.cql.CqlOperations;
 import org.springframework.data.cassandra.core.cql.CqlTemplate;
@@ -29,10 +31,13 @@ import tacos.domain.TacoUDT;
 public class QueryTraceOrderRepository implements OrderRepository {
 
     private final CqlSession session;
-    private final PreparedStatement saveStatement;
+    private PreparedStatement saveStatement;
 
-    public QueryTraceOrderRepository(CqlSession session) {
+    public QueryTraceOrderRepository(CqlSession session, SpringOrderRepository springOrderRepository) {
         this.session = session;
+    }
+
+    public void postConstruct() {
         this.saveStatement = session.prepare("INSERT INTO orders (id, deliveryname, deliverystreet, deliverycity, " +
                         "deliverystate, deliveryzip, ccnumber, ccexpiration, cccvv, placedat, tacos)" +
                         "values (?,?,?,?,?,?,?,?,?,?,?)");

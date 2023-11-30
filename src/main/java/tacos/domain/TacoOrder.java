@@ -10,10 +10,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.CreditCardNumber;
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
@@ -24,15 +22,10 @@ import lombok.Data;
 @Table("orders") // <1>
 public class TacoOrder implements Serializable {
 
-  private static final long serialVersionUID = 1L;
-
   @PrimaryKey  // <2>
-  @PrimaryKeyColumn (name = "id", type = PrimaryKeyType.PARTITIONED)
   private UUID id = Uuids.timeBased();
 
   private Instant placedAt = Instant.now();
-
-  // delivery and credit card properties omitted for brevity's sake
 
   @NotBlank(message="Delivery name is required")
   private String deliveryName;
