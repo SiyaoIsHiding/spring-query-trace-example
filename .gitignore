@@ -1,6 +1,6 @@
 *.dylib
 target/
-!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.jar
 
 .vscode/
 ### STS ###
