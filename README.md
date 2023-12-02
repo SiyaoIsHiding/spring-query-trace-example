@@ -1,7 +1,7 @@
 # Spring Boot Data Example of Using Query Trace in Astra DB
 This is a web app to order tacos, demonstrating how to use query trace in Astra DB under Spring Boot framework, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
 
-The version for Cassandra is at the branch `cassandra` here.
+The version for Cassandra is at the branch `cassandra`, [here](https://github.com/SiyaoIsHiding/spring-query-trace-example/tree/cassandra).
 
 ## Relevant Code
 The following code sets the query tracing to true in `src/main/java/tacos/data/OrderRepositoryImpl.java`.
