@@ -1,5 +1,7 @@
-# Spring Boot Data Example of Using Query Trace in Cassandra
-This is a web app to order tacos, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
+# Spring Boot Data Example of Using Query Trace in Astra DB
+This is a web app to order tacos, demonstrating how to use query trace in Astra DB under Spring Boot framework, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
+
+The version for Cassandra is at the branch `cassandra` here.
 
 ## Relevant Code
 The following code sets the query tracing to true in `src/main/java/tacos/data/OrderRepositoryImpl.java`.
@@ -33,28 +35,31 @@ And the following code retrieves the query trace information and present to the 
 
 ## Demo
 ### Prerequisite
-This demo needs a local Cassandra instance running, with a keyspace called `taco_cloud` in it. You can use the following command to start a Cassandra instance in Docker.
+This demo needs an Astra DB instance. Click [here](https://astra.datastax.com/) to register one for free, and create a keyspace called `taco_cloud` in it.
 
-```shell
-# run cassandra in docker
-docker network create cassandra-net
-docker run --name my-cassandra \
-  --network cassandra-net \
-  -p 9042:9042 \
-  -d cassandra:latest
+**Credentials**
 
-# enter the cqlsh
-docker run -it --network cassandra-net --rm cassandra cqlsh my-cassandra
+You need to fill in the credentials at `src/main/resources/application.yml`:
 
-# create the keyspace
-cqlsh> create keyspace taco_cloud
- ... with replication={'class':'SimpleStrategy', 'replication_factor':1}
- ... and durable_writes=true;
-
-# this piece of code comes from Spring in Action, 6th Edition.
+```yml
+spring:
+  data:
+    cassandra:
+      keyspace-name: taco_cloud
+      username: <client-id>
+      Password: <client-secret>
+      schema-action: create-if-not-exists
+datastax.astra:
+    secure-connect-bundle: <path-to-scb-from-src/main/resources/>
+astra.db:
+    id: <database-id>
+    region: <database-region>
+    keyspace: taco_cloud
+    application.token: <application-token>
 ```
-
-If you have a Cassandra instance running somewhere else, you can change the configuration information in `src/main/java/tacos/CassandraConfig.java`.
+1. In your Astra DB dashboard overview page, grab the `database-id` and `database-region`.
+2. Go to the "connect" tab, and then "Generate Token". From there you grab your `client-id`, `client-secret`, and `application-token`.
+2. Click "Get Bundle" to download the secure connect bundle, and put it under `src/main/resources/`. Fill in the `<path-to-scb-from-src/main/resources/>`, which is a relevant path to `src/main/resources/`.
 
 ### Run the app
 `mvn spring-boot:run` to run the app. Go to `localhost:8080`.
