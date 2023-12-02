@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import tacos.domain.TacoOrder;
 
-public interface OrderRepository extends CrudRepository<TacoOrder, UUID>, OrderRepositoryCustomTrace{
-    
+public interface OrderRepository extends CrudRepository<TacoOrder, UUID>, OrderRepositoryCustomTrace {
+
 }

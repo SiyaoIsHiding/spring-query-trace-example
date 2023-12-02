@@ -48,13 +48,14 @@ public class OrderController {
     ResultSet rs = orderRepo.saveWithQueryTrace(order);
     ExecutionInfo info = rs.getExecutionInfo();
     QueryTrace queryTrace = info.getQueryTrace();
-    List<String> traceMessages = queryTrace.getEvents().stream().map(event ->
-        String.format("* %s on %s[%s] at %s (%sµs)",
+    List<String> traceMessages = queryTrace.getEvents().stream()
+        .map(event -> String.format("* %s on %s[%s] at %s (%sµs)",
             event.getActivity(),
             event.getSourceAddress(),
             event.getThreadName(),
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(event.getTimestamp())),
-            event.getSourceElapsedMicros())).collect(java.util.stream.Collectors.toList());
+            event.getSourceElapsedMicros()))
+        .collect(java.util.stream.Collectors.toList());
     model.addAttribute("trace", traceMessages);
     sessionStatus.setComplete();
     return "trace";

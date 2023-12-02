@@ -32,7 +32,7 @@ public class DesignTacoController {
 
   @Autowired
   public DesignTacoController(
-        IngredientRepository ingredientRepo) {
+      IngredientRepository ingredientRepo) {
     this.ingredientRepo = ingredientRepo;
   }
 
@@ -80,9 +80,9 @@ public class DesignTacoController {
   private Iterable<Ingredient> filterByType(
       List<Ingredient> ingredients, Type type) {
     return ingredients
-              .stream()
-              .filter(x -> x.getType().equals(type))
-              .collect(Collectors.toList());
+        .stream()
+        .filter(x -> x.getType().equals(type))
+        .collect(Collectors.toList());
   }
 
 }

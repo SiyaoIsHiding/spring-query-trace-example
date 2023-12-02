@@ -6,7 +6,7 @@ import com.datastax.oss.driver.api.core.type.codec.MappingCodec;
 import com.datastax.oss.driver.api.core.type.codec.TypeCodec;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 
-public class IngredientCodec extends MappingCodec<UdtValue, IngredientUDT>{
+public class IngredientCodec extends MappingCodec<UdtValue, IngredientUDT> {
 
     private UserDefinedType ingredientUdt;
 
@@ -17,8 +17,8 @@ public class IngredientCodec extends MappingCodec<UdtValue, IngredientUDT>{
 
     @Override
     protected IngredientUDT innerToOuter(UdtValue value) {
-        IngredientUDT ingredientUDT = new IngredientUDT(value.getString("name"), 
-            Ingredient.Type.valueOf(value.getString("type")));
+        IngredientUDT ingredientUDT = new IngredientUDT(value.getString("name"),
+                Ingredient.Type.valueOf(value.getString("type")));
         return ingredientUDT;
     }
 
@@ -30,5 +30,4 @@ public class IngredientCodec extends MappingCodec<UdtValue, IngredientUDT>{
         return ingredientUdtValue;
     }
 
-    
 }

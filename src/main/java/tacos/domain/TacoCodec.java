@@ -1,11 +1,12 @@
 package tacos.domain;
+
 import com.datastax.oss.driver.api.core.data.UdtValue;
 import com.datastax.oss.driver.api.core.type.UserDefinedType;
 import com.datastax.oss.driver.api.core.type.codec.MappingCodec;
 import com.datastax.oss.driver.api.core.type.codec.TypeCodec;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 
-public class TacoCodec extends MappingCodec<UdtValue, TacoUDT>{
+public class TacoCodec extends MappingCodec<UdtValue, TacoUDT> {
 
     private final UserDefinedType tacoUDT;
 
