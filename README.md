@@ -1,5 +1,7 @@
 # Spring Boot Data Example of Using Query Trace in Cassandra
-This is a web app to order tacos, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
+This is a web app to order tacos, demonstrating how to use query trace in Cassandra under Spring Boot framework, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
+
+The version for Astra DB is at the branch astra, [here](https://github.com/SiyaoIsHiding/spring-query-trace-example/tree/astra).
 
 ## Relevant Code
 The following code sets the query tracing to true in `src/main/java/tacos/data/OrderRepositoryImpl.java`.
@@ -55,6 +57,8 @@ cqlsh> create keyspace taco_cloud
 ```
 
 If you have a Cassandra instance running somewhere else, you can change the configuration information in `src/main/java/tacos/CassandraConfig.java`.
+
+You can also change the keyspace name in `src/resources/application.yml`.
 
 ### Run the app
 `mvn spring-boot:run` to run the app. Go to `localhost:8080`.

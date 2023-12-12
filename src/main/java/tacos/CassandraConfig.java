@@ -2,6 +2,7 @@ package tacos;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
@@ -20,18 +21,19 @@ import tacos.domain.TacoCodec;
 @EnableCassandraRepositories(basePackages = { "tacos" })
 public class CassandraConfig extends AbstractCassandraConfiguration {
 
-    public static final String KEYSPACE = "taco_cloud";
+    @Value("${spring.data.cassandra.keyspace-name}")
+    public String keyspace;
 
     @Bean
     KeyspaceMetadata keyspaceMetadata(CqlSession session) {
-        return session.getMetadata().getKeyspace(KEYSPACE).get();
+        return session.getMetadata().getKeyspace(keyspace).get();
     }
 
     @PostConstruct
     void registerCodec(){
         CqlSession session = getRequiredSession();
-        UserDefinedType tacoUDT = session.getMetadata().getKeyspace(CassandraConfig.KEYSPACE).get().getUserDefinedType("taco").get();
-        UserDefinedType ingredientUDT = session.getMetadata().getKeyspace(CassandraConfig.KEYSPACE).get().getUserDefinedType("ingredient").get();
+        UserDefinedType tacoUDT = session.getMetadata().getKeyspace(keyspace).get().getUserDefinedType("taco").get();
+        UserDefinedType ingredientUDT = session.getMetadata().getKeyspace(keyspace).get().getUserDefinedType("ingredient").get();
         
         MutableCodecRegistry codecRegistry = (MutableCodecRegistry) session.getContext().getCodecRegistry();
         
@@ -44,7 +46,7 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Override
     protected String getKeyspaceName() {
-        return KEYSPACE;
+        return keyspace;
     }
 
     @Override
