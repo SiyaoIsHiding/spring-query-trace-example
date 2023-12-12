@@ -26,9 +26,8 @@ public class OrderRepositoryImpl implements OrderRepositoryCustomTrace {
 
     @Override
     public void init() {
-        this.saveStatement = session.prepare("INSERT INTO orders (id, deliveryname, deliverystreet, deliverycity, " +
-                "deliverystate, deliveryzip, ccnumber, ccexpiration, cccvv, placedat, tacos)" +
-                "values (?,?,?,?,?,?,?,?,?,?,?)");
+        this.saveStatement = session.prepare("INSERT INTO orders (id, deliveryname, deliverystreet, placedat, tacos)" +
+                "values (?,?,?,?,?)");
 
         String keyspaceName = session.getKeyspace()
                 .orElseThrow(() -> new RuntimeException("Keyspace not found"))
@@ -39,9 +38,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustomTrace {
 
         UserDefinedType tacoUDT = ksMetaData.getUserDefinedType("taco").get();
         UserDefinedType ingredientUDT = ksMetaData.getUserDefinedType("ingredient").get();
-        
+
         MutableCodecRegistry codecRegistry = (MutableCodecRegistry) session.getContext().getCodecRegistry();
-        
+
         TacoCodec tacoCodec = new TacoCodec(tacoUDT, codecRegistry.codecFor(tacoUDT));
         codecRegistry.register(tacoCodec);
 
@@ -53,8 +52,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustomTrace {
     public ResultSet saveWithQueryTrace(TacoOrder order) {
         BoundStatement statement = this.saveStatement
                 .bind(order.getId(), order.getDeliveryName(), order.getDeliveryStreet(),
-                        order.getDeliveryCity(), order.getDeliveryState(), order.getDeliveryZip(),
-                        order.getCcNumber(), order.getCcExpiration(), order.getCcCVV(),
                         order.getPlacedAt(), order.getTacos())
                 .setTracing(true);
         return session.execute(statement);
