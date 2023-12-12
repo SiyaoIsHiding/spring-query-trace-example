@@ -51,11 +51,6 @@ spring:
       schema-action: create-if-not-exists
 datastax.astra:
     secure-connect-bundle: <path-to-scb-from-src/main/resources/>
-astra.db:
-    id: <database-id>
-    region: <database-region>
-    keyspace: taco_cloud
-    application.token: <application-token>
 ```
 1. In your Astra DB dashboard overview page, grab the `database-id` and `database-region`.
 2. Go to the "connect" tab, and then "Generate Token". From there you grab your `client-id`, `client-secret`, and `application-token`.
