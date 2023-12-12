@@ -2,6 +2,7 @@ package tacos;
 
 import java.nio.file.Path;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.cassandra.CqlSessionBuilderCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,11 +17,12 @@ import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
 @EnableConfigurationProperties(AstraConfig.class)
 public class CassandraConfig {
 
-    public static final String KEYSPACE = "taco_cloud";
+    @Value("${spring.data.cassandra.keyspace-name}")
+    public String keyspace;
 
     @Bean
     KeyspaceMetadata keyspaceMetadata(CqlSession session) {
-        return session.getMetadata().getKeyspace(KEYSPACE).get();
+        return session.getMetadata().getKeyspace(keyspace).get();
     }
 
     @Bean
@@ -29,4 +31,7 @@ public class CassandraConfig {
         return builder -> builder.withCloudSecureConnectBundle(bundle);
     }
 
+    public String getKeyspace() {
+        return keyspace;
+    }
 }

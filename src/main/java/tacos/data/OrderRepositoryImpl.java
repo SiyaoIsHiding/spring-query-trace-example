@@ -6,10 +6,10 @@ import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
 import com.datastax.oss.driver.api.core.type.UserDefinedType;
 import com.datastax.oss.driver.api.core.type.codec.registry.MutableCodecRegistry;
 
-import tacos.CassandraConfig;
 import tacos.domain.IngredientCodec;
 import tacos.domain.TacoCodec;
 import tacos.domain.TacoOrder;
@@ -30,8 +30,15 @@ public class OrderRepositoryImpl implements OrderRepositoryCustomTrace {
                 "deliverystate, deliveryzip, ccnumber, ccexpiration, cccvv, placedat, tacos)" +
                 "values (?,?,?,?,?,?,?,?,?,?,?)");
 
-        UserDefinedType tacoUDT = session.getMetadata().getKeyspace(CassandraConfig.KEYSPACE).get().getUserDefinedType("taco").get();
-        UserDefinedType ingredientUDT = session.getMetadata().getKeyspace(CassandraConfig.KEYSPACE).get().getUserDefinedType("ingredient").get();
+        String keyspaceName = session.getKeyspace()
+                .orElseThrow(() -> new RuntimeException("Keyspace not found"))
+                .asInternal();
+        KeyspaceMetadata ksMetaData = session.getMetadata()
+                .getKeyspace(keyspaceName)
+                .orElseThrow(() -> new RuntimeException("Keyspace not found"));
+
+        UserDefinedType tacoUDT = ksMetaData.getUserDefinedType("taco").get();
+        UserDefinedType ingredientUDT = ksMetaData.getUserDefinedType("ingredient").get();
         
         MutableCodecRegistry codecRegistry = (MutableCodecRegistry) session.getContext().getCodecRegistry();
         

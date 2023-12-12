@@ -10,8 +10,3 @@ spring:
       schema-action: create-if-not-exists
 datastax.astra:
     secure-connect-bundle: <path-to-scb-from-src/main/resources/>
-astra.db:
-    id: <database-id>
-    region: <database-region>
-    keyspace: taco_cloud
-    application.token: <application-token>
