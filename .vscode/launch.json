@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TacoCloudApplication<taco-cloud-sd-cassandra>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "tacos.TacoCloudApplication",
+            "projectName": "taco-cloud-sd-cassandra",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -1,9 +1,4 @@
 package tacos.web;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -15,12 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
-import com.datastax.oss.driver.api.core.cql.QueryTrace;
-import com.datastax.oss.driver.api.core.cql.ResultSet;
-
+import tacos.TacoOrder;
 import tacos.data.OrderRepository;
-import tacos.domain.TacoOrder;
 
 @Controller
 @RequestMapping("/orders")
@@ -31,7 +22,6 @@ public class OrderController {
 
   public OrderController(OrderRepository orderRepo) {
     this.orderRepo = orderRepo;
-    orderRepo.init();
   }
 
   @GetMapping("/current")
@@ -40,24 +30,15 @@ public class OrderController {
   }
 
   @PostMapping
-  public String processOrder(@Valid TacoOrder order, Errors errors, Model model, SessionStatus sessionStatus) {
+  public String processOrder(@Valid TacoOrder order, Errors errors, SessionStatus sessionStatus) {
     if (errors.hasErrors()) {
       return "orderForm";
     }
 
-    ResultSet rs = orderRepo.saveWithQueryTrace(order);
-    ExecutionInfo info = rs.getExecutionInfo();
-    QueryTrace queryTrace = info.getQueryTrace();
-    List<String> traceMessages = queryTrace.getEvents().stream().map(event ->
-        String.format("* %s on %s[%s] at %s (%sµs)",
-            event.getActivity(),
-            event.getSourceAddress(),
-            event.getThreadName(),
-            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(event.getTimestamp())),
-            event.getSourceElapsedMicros())).collect(java.util.stream.Collectors.toList());
-    model.addAttribute("trace", traceMessages);
+    orderRepo.save(order);
     sessionStatus.setComplete();
-    return "trace";
+
+    return "redirect:/";
   }
 
 }

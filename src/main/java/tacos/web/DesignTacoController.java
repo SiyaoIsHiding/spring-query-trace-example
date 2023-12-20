@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import tacos.Ingredient;
+import tacos.Ingredient.Type;
+import tacos.Taco;
+import tacos.TacoOrder;
+import tacos.TacoUDT;
 import tacos.data.IngredientRepository;
-import tacos.domain.Ingredient;
-import tacos.domain.Taco;
-import tacos.domain.TacoOrder;
-import tacos.domain.TacoUDT;
-import tacos.domain.Ingredient.Type;
 
 @Controller
 @RequestMapping("/design")

@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import tacos.domain.Ingredient;
-import tacos.domain.IngredientUDT;
+import tacos.Ingredient;
+import tacos.IngredientUDT;
 
 @Component
 public class StringToIngredientConverter implements Converter<String, IngredientUDT> {
