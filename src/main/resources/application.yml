@@ -2,5 +2,7 @@ spring:
   data:
     cassandra:
       keyspace-name: taco_cloud
-      schema-action: recreate
-      local-datacenter: datacenter1
+      username: <client-id>
+      Password: <client-secret>
+datastax.astra:
+    secure-connect-bundle: <path-to-scb-from-src/main/resources/>

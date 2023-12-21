@@ -1,5 +1,3 @@
-src/main/resources/secure-connect-bundle.zip
-
 *.dylib
 target/
 .mvn/wrapper/maven-wrapper.jar
