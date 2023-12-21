@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Order Processed</title>
+</head>
+
+<body>
+    <h2>This is what happened behind the scene:</h2>
+    <div th:each="message : ${trace}">
+        <p th:text="${message}">Message</p>
+    </div>
+    <div>
+        <a th:href="@{/}">Return to Home</a>
+    </div>
+</body>
+
+</html>
