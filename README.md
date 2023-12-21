@@ -1,36 +1,25 @@
 # Spring Boot Data Example of Using Query Trace in Astra DB
-This is a web app to order tacos, demonstrating how to use query trace in Astra DB under Spring Boot framework, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
+This is a web app to order tacos, demonstrating how to use query trace in Cassandra under Spring Boot framework by injecting customized `CqlSession`, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
 
 The version for Cassandra is at the branch `cassandra`, [here](https://github.com/SiyaoIsHiding/spring-query-trace-example/tree/cassandra).
 
 ## Relevant Code
-The following code sets the query tracing to true in `src/main/java/tacos/data/OrderRepositoryImpl.java`.
+The following code in `src/main/java/tacos/config/QueryTraceCqlSession.java` enabled the query tracing, retrieves the query trace information from the `ResultSet` object, and add the `TraceEvent`s into a cache for later use.
+
 ```java
     @Override
-    public ResultSet saveWithQueryTrace(TacoOrder order) {
-        BoundStatement statement = this.saveStatement
-                .bind(order.getId(), order.getDeliveryName(), order.getDeliveryStreet(),
-                        order.getDeliveryCity(), order.getDeliveryState(), order.getDeliveryZip(),
-                        order.getCcNumber(), order.getCcExpiration(), order.getCcCVV(),
-                        order.getPlacedAt(), order.getTacos())
-                .setTracing(true);
-        return session.execute(statement);
+    public ResultSet execute(Statement<?> statement) {
+        Statement<?> injected = statement.setTracing(true);
+        ResultSet rs = delegate.execute(injected);
+        if (injected.isTracing()) {
+            ExecutionInfo info = rs.getExecutionInfo();
+            QueryTrace queryTrace = info.getQueryTrace();
+            queryTrace.getEvents().forEach(event -> {
+                traceCache.cache.add(event);
+            });
+        }
+        return rs;
     }
-```
-
-And the following code retrieves the query trace information and present to the front end in `src/main/java/tacos/web/OrderController.java`.
-```java
-    ResultSet rs = orderRepo.saveWithQueryTrace(order);
-    ExecutionInfo info = rs.getExecutionInfo();
-    QueryTrace queryTrace = info.getQueryTrace();
-    List<String> traceMessages = queryTrace.getEvents().stream().map(event ->
-        String.format("* %s on %s[%s] at %s (%sµs)",
-            event.getActivity(),
-            event.getSourceAddress(),
-            event.getThreadName(),
-            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(event.getTimestamp())),
-            event.getSourceElapsedMicros())).collect(java.util.stream.Collectors.toList());
-    model.addAttribute("trace", traceMessages);
 ```
 
 ## Demo
@@ -52,8 +41,8 @@ spring:
 datastax.astra:
     secure-connect-bundle: <path-to-scb-from-src/main/resources/>
 ```
-1. In your Astra DB dashboard overview page, grab the `database-id` and `database-region`.
-2. Go to the "connect" tab, and then "Generate Token". From there you grab your `client-id`, `client-secret`, and `application-token`.
+
+1. In your database dashboard page, go to the "connect" tab, and then "Generate Token". From there you grab your `client-id` and `client-secret`.
 2. Click "Get Bundle" to download the secure connect bundle, and put it under `src/main/resources/`. Fill in the `<path-to-scb-from-src/main/resources/>`, which is a relevant path to `src/main/resources/`.
 
 ### Run the app
