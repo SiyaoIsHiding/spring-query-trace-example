@@ -1,36 +1,25 @@
 # Spring Boot Data Example of Using Query Trace in Cassandra
-This is a web app to order tacos, demonstrating how to use query trace in Cassandra under Spring Boot framework, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
+This is a web app to order tacos, demonstrating how to use query trace in Cassandra under Spring Boot framework by injecting customized `CqlSession`, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
 
 The version for Astra DB is at the branch astra, [here](https://github.com/SiyaoIsHiding/spring-query-trace-example/tree/astra).
 
 ## Relevant Code
-The following code sets the query tracing to true in `src/main/java/tacos/data/OrderRepositoryImpl.java`.
+The following code in `src/main/java/tacos/config/QueryTraceCqlSession.java` enabled the query tracing, retrieves the query trace information from the `ResultSet` object, and add the `TraceEvent`s into a cache for later use.
+
 ```java
     @Override
-    public ResultSet saveWithQueryTrace(TacoOrder order) {
-        BoundStatement statement = this.saveStatement
-                .bind(order.getId(), order.getDeliveryName(), order.getDeliveryStreet(),
-                        order.getDeliveryCity(), order.getDeliveryState(), order.getDeliveryZip(),
-                        order.getCcNumber(), order.getCcExpiration(), order.getCcCVV(),
-                        order.getPlacedAt(), order.getTacos())
-                .setTracing(true);
-        return session.execute(statement);
+    public ResultSet execute(Statement<?> statement) {
+        Statement<?> injected = statement.setTracing(true);
+        ResultSet rs = delegate.execute(injected);
+        if (injected.isTracing()) {
+            ExecutionInfo info = rs.getExecutionInfo();
+            QueryTrace queryTrace = info.getQueryTrace();
+            queryTrace.getEvents().forEach(event -> {
+                traceCache.cache.add(event);
+            });
+        }
+        return rs;
     }
-```
-
-And the following code retrieves the query trace information and present to the front end in `src/main/java/tacos/web/OrderController.java`.
-```java
-    ResultSet rs = orderRepo.saveWithQueryTrace(order);
-    ExecutionInfo info = rs.getExecutionInfo();
-    QueryTrace queryTrace = info.getQueryTrace();
-    List<String> traceMessages = queryTrace.getEvents().stream().map(event ->
-        String.format("* %s on %s[%s] at %s (%sµs)",
-            event.getActivity(),
-            event.getSourceAddress(),
-            event.getThreadName(),
-            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(event.getTimestamp())),
-            event.getSourceElapsedMicros())).collect(java.util.stream.Collectors.toList());
-    model.addAttribute("trace", traceMessages);
 ```
 
 ## Demo
@@ -56,9 +45,7 @@ cqlsh> create keyspace taco_cloud
 # this piece of code comes from Spring in Action, 6th Edition.
 ```
 
-If you have a Cassandra instance running somewhere else, you can change the configuration information in `src/main/java/tacos/CassandraConfig.java`.
-
-You can also change the keyspace name in `src/resources/application.yml`.
+If you have a Cassandra instance running somewhere else, you can change the configuration information in `src/main/java/tacos/CassandraConfig.java` and `src/resources/application.yml`.
 
 ### Run the app
 `mvn spring-boot:run` to run the app. Go to `localhost:8080`.
@@ -72,6 +59,6 @@ Place the order
 
 ![images/order.png](images/order.png)
 
-See the trace
+Go to `localhost:8080/trace` to see the trace
 
 ![images/trace.png](images/trace.png)
