@@ -1,12 +1,6 @@
-logging:
-  level:
-    ROOT: DEBUG
 spring:
   data:
     cassandra:
       keyspace-name: taco_cloud
-      username: <client-id>
-      Password: <client-secret>
-      schema-action: create-if-not-exists
-datastax.astra:
-    secure-connect-bundle: <path-to-scb-from-src/main/resources/>
+      schema-action: recreate
+      local-datacenter: datacenter1

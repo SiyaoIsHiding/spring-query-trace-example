@@ -1,7 +1,6 @@
-package tacos.domain;
-
-import java.time.Instant;
+package tacos;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,19 +21,19 @@ import lombok.Data;
 @Table("tacos") // <1>
 public class Taco {
 
-  @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED) // <2>
+  @PrimaryKeyColumn(type=PrimaryKeyType.PARTITIONED) // <2>
   private UUID id = Uuids.timeBased();
 
   @NotNull
   @Size(min = 5, message = "Name must be at least 5 characters long")
   private String name;
 
-  @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, // <3>
-      ordering = Ordering.DESCENDING)
-  private Instant createdAt = Instant.now();
+  @PrimaryKeyColumn(type=PrimaryKeyType.CLUSTERED,  // <3>
+                    ordering=Ordering.DESCENDING)
+  private Date createdAt = new Date();
 
-  @Size(min = 1, message = "You must choose at least 1 ingredient")
-  @Column("ingredients") // <4>
+  @Size(min=1, message="You must choose at least 1 ingredient")
+  @Column("ingredients")                            // <4>
   private List<IngredientUDT> ingredients = new ArrayList<>();
 
   public void addIngredient(Ingredient ingredient) {

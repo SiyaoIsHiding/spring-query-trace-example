@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import tacos.Ingredient;
+import tacos.Ingredient.Type;
+import tacos.Taco;
+import tacos.TacoOrder;
+import tacos.TacoUDT;
 import tacos.data.IngredientRepository;
-import tacos.domain.Ingredient;
-import tacos.domain.Taco;
-import tacos.domain.TacoOrder;
-import tacos.domain.TacoUDT;
-import tacos.domain.Ingredient.Type;
 
 @Controller
 @RequestMapping("/design")
@@ -30,7 +30,7 @@ public class DesignTacoController {
   private final IngredientRepository ingredientRepo;
 
   public DesignTacoController(
-      IngredientRepository ingredientRepo) {
+        IngredientRepository ingredientRepo) {
     this.ingredientRepo = ingredientRepo;
   }
 
@@ -78,9 +78,9 @@ public class DesignTacoController {
   private Iterable<Ingredient> filterByType(
       List<Ingredient> ingredients, Type type) {
     return ingredients
-        .stream()
-        .filter(x -> x.getType().equals(type))
-        .collect(Collectors.toList());
+              .stream()
+              .filter(x -> x.getType().equals(type))
+              .collect(Collectors.toList());
   }
 
 }

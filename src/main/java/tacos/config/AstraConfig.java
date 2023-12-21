@@ -1,4 +1,4 @@
-package tacos;
+package tacos.config;
 
 import java.io.File;
 

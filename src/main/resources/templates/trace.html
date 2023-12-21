@@ -6,8 +6,7 @@
 </head>
 
 <body>
-    <h2>Order Processed</h2>
-    <p>This is what happened behind the scene:</p>
+    <h2>This is what happened behind the scene:</h2>
     <div th:each="message : ${trace}">
         <p th:text="${message}">Message</p>
     </div>
