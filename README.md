@@ -57,6 +57,6 @@ Place the order
 
 ![images/order.png](images/order.png)
 
-See the trace
+Go to `localhost:8080/trace` to see the trace
 
 ![images/trace.png](images/trace.png)
