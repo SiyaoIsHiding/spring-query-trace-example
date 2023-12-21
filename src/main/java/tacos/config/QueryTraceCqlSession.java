@@ -15,10 +15,8 @@ import com.datastax.oss.driver.api.core.metrics.Metrics;
 import com.datastax.oss.driver.api.core.session.Request;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 
-import lombok.extern.slf4j.Slf4j;
 import tacos.data.QueryTraceCache;
 
-@Slf4j
 public class QueryTraceCqlSession implements CqlSession {
 
     private final CqlSession delegate;
@@ -83,7 +81,6 @@ public class QueryTraceCqlSession implements CqlSession {
     public ResultSet execute(Statement<?> statement) {
         Statement<?> injected = statement.setTracing(true);
         ResultSet rs = delegate.execute(injected);
-        log.info("execute statement");
         if (injected.isTracing()) {
             ExecutionInfo info = rs.getExecutionInfo();
             QueryTrace queryTrace = info.getQueryTrace();
