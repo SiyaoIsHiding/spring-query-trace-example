@@ -23,12 +23,16 @@ public class LatestTraceController {
     @GetMapping
     public String showLatestTrace(Model model) {
         List<String> traceMessages = new ArrayList<>();
-        traceCache.cache.forEach(event -> {
-            String s = String.format("* %s on %s[%s] at %s (%sµs)", event.getActivity(), event.getSourceAddress(),
-                    event.getThreadName(),
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date(event.getTimestamp())),
-                    event.getSourceElapsedMicros());
-            traceMessages.add(s);
+        traceCache.cache.asMap().keySet().forEach(key -> {
+            traceMessages.add("Trace for " + key);
+            traceCache.cache.getIfPresent(key).getEvents().forEach(event -> {
+                String s = String.format("* %s on %s[%s] at %s (%sµs)", event.getActivity(), event.getSourceAddress(),
+                        event.getThreadName(),
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+                                .format(new java.util.Date(event.getTimestamp())),
+                        event.getSourceElapsedMicros());
+                traceMessages.add(s);
+            });
         });
         model.addAttribute("trace", traceMessages);
         return "trace";

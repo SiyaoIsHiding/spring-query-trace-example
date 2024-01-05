@@ -14,9 +14,7 @@ The following code in `src/main/java/tacos/config/QueryTraceCqlSession.java` ena
         if (injected.isTracing()) {
             ExecutionInfo info = rs.getExecutionInfo();
             QueryTrace queryTrace = info.getQueryTrace();
-            queryTrace.getEvents().forEach(event -> {
-                traceCache.cache.add(event);
-            });
+            traceCache.cache.put(info.getTracingId(), queryTrace);
         }
         return rs;
     }

@@ -4,5 +4,7 @@ spring:
       keyspace-name: taco_cloud
       username: <client-id>
       Password: <client-secret>
+      schema-action: CREATE_IF_NOT_EXISTS
+
 datastax.astra:
     secure-connect-bundle: <path-to-scb-from-src/main/resources/>
