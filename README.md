@@ -1,10 +1,10 @@
 # Spring Boot Data Example of Using Query Trace in Cassandra
 This is a web app to order tacos, demonstrating how to use query trace in Cassandra under Spring Boot framework by injecting customized `CqlSession`, based on the [example code](https://github.com/habuma/spring-in-action-6-samples/tree/main/ch04/tacos-sd-cassandra) in the book Spring in Action.
 
-The version for Astra DB is at the branch astra, [here](https://github.com/SiyaoIsHiding/spring-query-trace-example/tree/astra).
+The version for Astra DB is at the branch `astra`, [here](https://github.com/SiyaoIsHiding/spring-query-trace-example/tree/astra).
 
 ## Relevant Code
-The following code in `src/main/java/tacos/config/QueryTraceCqlSession.java` enabled the query tracing, retrieves the query trace information from the `ResultSet` object, and add the `TraceEvent`s into a cache for later use.
+The following code in `src/main/java/tacos/config/QueryTraceCqlSession.java` enables the query tracing, retrieves the query trace information from the `ResultSet` object, and adds the `QueryTrace` object into a cache for later use.
 
 ```java
     @Override
