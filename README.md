@@ -4,7 +4,7 @@ This is a web app to order tacos, demonstrating how to use query trace in Cassan
 The version for Cassandra is at the branch `cassandra`, [here](https://github.com/SiyaoIsHiding/spring-query-trace-example/tree/cassandra).
 
 ## Relevant Code
-The following code in `src/main/java/tacos/config/QueryTraceCqlSession.java` enabled the query tracing, retrieves the query trace information from the `ResultSet` object, and add the `TraceEvent`s into a cache for later use.
+The following code in `src/main/java/tacos/config/QueryTraceCqlSession.java` enables the query tracing, retrieves the query trace information from the `ResultSet` object, and adds the `QueryTrace` object into a cache for later use.
 
 ```java
     @Override
@@ -40,7 +40,7 @@ datastax.astra:
     secure-connect-bundle: <path-to-scb-from-src/main/resources/>
 ```
 
-1. In your database dashboard page, go to the "connect" tab, and then "Generate Token". From there you grab your `client-id` and `client-secret`.
+1. On your database dashboard page, go to the "connect" tab, and then "Generate Token". From there you grab your `client-id` and `client-secret`.
 2. Click "Get Bundle" to download the secure connect bundle, and put it under `src/main/resources/`. Fill in the `<path-to-scb-from-src/main/resources/>`, which is a relevant path to `src/main/resources/`.
 
 ### Run the app
